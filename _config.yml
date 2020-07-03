@@ -6,7 +6,7 @@
 name: br-sn
 
 # Name of the author
-author: Amit Merchant
+author: br-sn
 
 # Short bio or description (displayed in the header)
 description: Code and write-ups
@@ -21,15 +21,15 @@ avatar: https://avatars0.githubusercontent.com/u/39455110?s=460&u=287522e07c6c08
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email: amit.d.merchant@gmail.com
+  email: 
   facebook:
   flickr:
-  github: amitmerchant1990/reverie
+  github: https://github.com/br-sn/
   instagram:
   linkedin: 
   pinterest:
-  rss: rss
-  twitter: amit_merchant
+  rss: 
+  twitter: 
   stackoverflow: 
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/
