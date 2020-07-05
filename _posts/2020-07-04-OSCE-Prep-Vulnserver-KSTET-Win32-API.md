@@ -194,7 +194,7 @@ There is however room to cut this one even shorter by using dotless decimal nota
 3223
 \\32
 ```
-This removes the need for the padding and cuts down the total shellcode size to 36 bytes, down from 41. Still not quite as small as socket re-use, but have can we go further?
+This removes the need for the padding and cuts down the total shellcode size to 36 bytes, down from 41. Still not quite as small as socket re-use, but can we go further?
 
 Luckily, Windows is quite helpful in loading libraries for us. The documentation mentions the following:
 >If the string specifies a module name without a path and the file name extension is omitted, the function appends the default library extension .dll to the module name. To prevent the function from appending .dll to the module name, include a trailing point character (.) in the module name string.
