@@ -1,6 +1,6 @@
 ---
 layout: post
-title: OSCE Prep - Vulnserver KSTET Using Win32 API 
+title: OSCE Prep - Vulnserver KSTET Using Win32 API And 32 Bytes Of Shellcode
 categories: [OSCE]
 ---
 
