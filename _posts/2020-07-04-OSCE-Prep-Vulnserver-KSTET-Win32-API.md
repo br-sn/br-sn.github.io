@@ -199,7 +199,7 @@ There is however room to cut this one even shorter by using dotless decimal nota
 This removes the need for the padding and cuts down the total shellcode size to 36 bytes, down from 41. Still not quite as small as socket re-use, but can we go further?
 
 Luckily, Windows is quite helpful in loading libraries for us. The documentation mentions the following:
->If the string specifies a module name without a path and the file name extension is omitted, the function appends the default library extension .dll to the module name. To prevent the function from appending .dll to the module name, include a trailing point character (.) in the module name string.
+>If no file name extension is specified in the lpFileName parameter, the default library extension .dll is appended. 
 
 So all we need to do is specify the name of our DLL without the extension, cutting a further 4 bytes off our string and leaving us with a total shellcode size of 32 bytes.  
 
