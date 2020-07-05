@@ -181,6 +181,8 @@ smbserver.py s .
 We continue execution and step into the call to LoadLibraryA, noticing our string has made it to the stack:
 ![call loadlibrary](/images/callloadlibrary.png)
 
+If we continue execution from here, we get a connection to our SMB server and our reverse shell. Now let's see if we can improve this at all.
+
 ### Small, smaller, smallest
 
 The length of our shellcode used so far, including the adjustment of ESP, is 41 bytes. This is markedly shorter than a usual reverse shell and should also be shorter than most other Win32 API calls to gain code execution, such as `WinExec`, `ShellExecute` and `system`. 
