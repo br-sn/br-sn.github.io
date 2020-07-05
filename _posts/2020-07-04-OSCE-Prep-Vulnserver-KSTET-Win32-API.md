@@ -132,7 +132,7 @@ B89E9AE277 //mov eax,77E29A9E
 FFD0 //call eax
 ```
 We also move ESP out of the way since it's quite close to our shellcode, meaning it's likely something will get overwritten and break our execution.
-On top of that, we also add in two NOPs at the top to make sure our shellcode is nicely aligned to where we land in our buffer.
+On top of that, we also keep two `A`s at the top to make sure our shellcode is nicely aligned to where we land in our buffer. 
 
 Our exploit now looks as follows:
 ```python
