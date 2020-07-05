@@ -235,7 +235,7 @@ s.send(buf)
 print s.recv(1024)
 s.close()
 ```
-Resulting in the following call being made using LoadLibraryA:
+Resulting in the following call being made using LoadLibraryA resulting in a succesful retrieval of our DLL and a reverse shell:
 ![smallest?](/images/smallest.png)
 
 Thanks for reading, feel free let me know if you found a way to cut down on this size even further.
