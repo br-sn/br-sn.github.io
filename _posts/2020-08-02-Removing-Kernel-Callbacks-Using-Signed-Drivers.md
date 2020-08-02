@@ -300,4 +300,4 @@ Finally, it would be good to find some indicators of this activity using known b
 
 ## Code
 
-CheekyBlinder has been released at https://github.com/br-sn/CheekyBlinder. Please use responsibly, the code is not great and can cause BSODs. Only supported on Win 1909 and 2004 for now. 
+CheekyBlinder has been released [here](https://github.com/br-sn/CheekyBlinder). Please use responsibly, the code is not great and can cause BSODs. Only supported on Win 1909 and 2004 for now. 
