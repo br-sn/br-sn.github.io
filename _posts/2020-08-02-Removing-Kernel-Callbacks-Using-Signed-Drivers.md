@@ -297,3 +297,7 @@ For the blue team, monitoring for service creation and the use of the SELoadDriv
 There is still more functionality to be implemented. I plan on adding support for the other callback routines very soon, as well as probably adding a way to restore previously removed callbacks.
 More work also needs to be done on reliably finding the `PspCreateProcessNotifyRoutine` array and putting checks in place if it's likely to fail, as this will cause Blue Screens Of Death (trust me).
 Finally, it would be good to find some indicators of this activity using known blue team tools such as Sysmon to detect this activity in an enterprise environment.
+
+## Code
+
+CheekyBlinder has been released at https://github.com/br-sn/CheekyBlinder. Please use responsibly, the code is not great and can cause BSODs. Only supported on Win 1909 and 2004 for now. 
