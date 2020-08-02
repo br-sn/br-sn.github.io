@@ -1,5 +1,7 @@
 ## Intro
 
+*Edit: [repo](https://github.com/br-sn/CheekyBlinder) has been updated to include image load and thread creation notification callback support.*
+
 This PoC was created to learn more about the power of driver exploits, the practical challenges and impact of kernel writes and the way EDRs use kernel callbacks to get visibility on the system they are meant to protect from harmful software.
 
 In fact, the main driver behind this was the answer given by people in information security when asked: "What can you do when you can read and write kernel memory?". The answer invariably being:
