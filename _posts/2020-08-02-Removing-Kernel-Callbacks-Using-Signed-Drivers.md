@@ -1,5 +1,3 @@
-# Look Ma, No Callbacks!
-
 ## Intro
 
 This PoC was created to learn more about the power of driver exploits, the practical challenges and impact of kernel writes and the way EDRs use kernel callbacks to get visibility on the system they are meant to protect from harmful software.
