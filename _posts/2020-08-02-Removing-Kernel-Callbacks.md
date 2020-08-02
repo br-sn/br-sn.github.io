@@ -285,7 +285,7 @@ fffff800`1dd13f10  00000000`00000000 00000000`00000000
 
 And we can now run Mimikatz unencumbered:
 
-[IMAGE OF MIMIKATZ OK]
+![Mimikatz running fine](/images/mimikatzOK.jpg)
 
 
 ## Detection and prevention
