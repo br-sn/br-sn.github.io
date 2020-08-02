@@ -200,7 +200,7 @@ fffff800`1dd13f10  00000000`00000000 00000000`00000000
 ```
 
 Running mimikatz causes Avast to kick into action, as expected:
-![Mimikatz blocked](https://github.com/br-sn/br-sn.github.io/blob/master/images/mimikatzremoved.JPG)
+![Mimikatz blocked](/images/mimikatzremoved.JPG)
 
 Loading up our program, we get the following output:
 ```
@@ -283,7 +283,7 @@ fffff800`1dd13f10  00000000`00000000 00000000`00000000
 
 And we can now run Mimikatz unencumbered:
 
-![Mimikatz running fine](https://github.com/br-sn/br-sn.github.io/blob/master/images/mimikatzOK.JPG)
+![Mimikatz running fine](/images/mimikatzOK.JPG)
 
 
 ## Detection and prevention
