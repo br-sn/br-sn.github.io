@@ -83,7 +83,6 @@ plugins:
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
   - jekyll-seo-tag
   - jekyll-paginate
-remote_theme: "mmistakes/minimal-mistakes@4.21.0"
 
 include: ['_pages']
 
