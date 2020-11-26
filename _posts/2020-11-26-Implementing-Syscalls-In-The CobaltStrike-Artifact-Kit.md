@@ -29,7 +29,8 @@ The reason it is interesting is that the implant does not attempt to create its 
 I do most of my coding in Visual Studio, and the Syswhispers tool uses MASM to compile the assembly, so my next step in learning to use the kit was to move it to a Windows machine and use Visual Studio to modify and compile the code.
 
 I created a new solution in Visual Studio using the C++ console app template and added the following files:
-![alt text](/images/files-in-solution.png "Files in Solution")
+
+![Files in Solution](/images/files-in-solution.png)
 
 You'll notice straight away that patch.h and patch.c contain some errors relating to the undefined 'DATA_SIZE' identifier. In the artifact kit build script this preprocessor definition is passed as a flag to the mingw-gcc compiler at compile time. In VS, we can either define it manually or add it as a preprocessor definition in the project properties.
 
@@ -51,11 +52,11 @@ We can see that the beacon outputs to the console and the blinking cursor remain
 
 A first option is to change the subsystem in `Configuration Properties > Linker > System` and set it to `Windows (/SUBSYSTEM:WINDOWS)`.
 
-![alt text](/images/subsystemoptions.png "Subsystem and Linker options")
+![Subsystem and Linker options](/images/subsystemoptions.png)
 
 If we do this, we also need to change the Entrypoint of the application in `Advanced` in the Linker menu to the entrypoint of the C Runtime library: `mainCRTStartup`.
 
-![alt text](/images/entrypoint-maincrtstartup.png "mainCRTStartup")
+![mainCRTStartup](/images/entrypoint-maincrtstartup.png)
 
 
 A second, very straightforward way is to use editbin.exe which is available with Visual Studio:
@@ -161,17 +162,17 @@ To find the relevant syscalls, make sure you have debug symbols enabled and put 
 
 With the breakpoints in place, we start debugging the program and hit the first VirtualAlloc breakpoint. In the disassembler window, step into the execution flow until you see a 'syscall' instruction:
 
-![alt text](/images/virtualalloc-syscall-disassembly.PNG "VirtualAlloc Syscall")
+![VirtualAlloc Syscall](/images/virtualalloc-syscall-disassembly.PNG)
 
 From this we know that the syscall is made in the NtAllocateVirtualMemory function. We note this down for later and repeat these steps for the next two breakpoints. We note that VirtualProtect ends up calling NtProtectVirtualMemory and CreateThread ends up at NtCreateThreadEx. There's a fair bit of setup done under the hood by the CreateThread API before it finally ends up at the syscall, as you'll see if you step through the execution flow in the disassembler.
 
 VirtualProtect:
 
-![alt text](/images/virtualprotect-syscall-disassembly.PNG "VirtualProtect Syscall")
+![VirtualProtect Syscall](/images/virtualprotect-syscall-disassembly.PNG)
 
 CreateThread:
 
-![alt text](/images/createthread-syscall-disassembly.PNG "CreateThread Syscall")
+![CreateThread Syscall](/images/createthread-syscall-disassembly.PNG)
 
 Now that we know which Nt* functions we need, we can provide that list to Syswhispers which will generate the appropriate assembly and header files for us:
 
