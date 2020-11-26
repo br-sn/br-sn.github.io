@@ -68,7 +68,7 @@ Re-running the beacon now displays no print statement and no blinking cursor - p
 
 Before we move on with further customization, let's have a look at the import table to see what could give away the malicious nature of our binary. Using `dumpbin /imports` we can see the following imports from kernel32.dll:
 
-```cmd
+```
  5DB VirtualProtect
  5D5 VirtualAlloc
  27B GetModuleHandleA
@@ -176,7 +176,7 @@ CreateThread:
 
 Now that we know which Nt* functions we need, we can provide that list to Syswhispers which will generate the appropriate assembly and header files for us:
 
-```cmd
+```
 python .\Syswhispers.py -f NtCreateThreadEx,NtProtectVirtualMemory,NtAllocateVirtualMemory -o C:\Dev\ArtifactkitBlog\syscalls
 ```
 
@@ -317,7 +317,7 @@ in the `NtCreateThreadEx` function definition, there is a parameter called `IN P
 
 With the WinAPI functions replaced, let's have a look at the import table of our modified beacon.exe:
 
-```cmd
+```
  58B Sleep
  21D GetCurrentProcess
  27B GetModuleHandleA
