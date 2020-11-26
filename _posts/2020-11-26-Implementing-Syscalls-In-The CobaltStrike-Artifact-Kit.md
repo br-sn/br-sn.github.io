@@ -30,7 +30,7 @@ I do most of my coding in Visual Studio, and the Syswhispers tool uses MASM to c
 
 I created a new solution in Visual Studio using the C++ console app template and added the following files:
 
-![Files in Solution](/images/files-in-solution.png)
+![Files in Solution](/images/files-in-solution.PNG)
 
 You'll notice straight away that patch.h and patch.c contain some errors relating to the undefined 'DATA_SIZE' identifier. In the artifact kit build script this preprocessor definition is passed as a flag to the mingw-gcc compiler at compile time. In VS, we can either define it manually or add it as a preprocessor definition in the project properties.
 
@@ -52,11 +52,11 @@ We can see that the beacon outputs to the console and the blinking cursor remain
 
 A first option is to change the subsystem in `Configuration Properties > Linker > System` and set it to `Windows (/SUBSYSTEM:WINDOWS)`.
 
-![Subsystem and Linker options](/images/subsystemoptions.png)
+![Subsystem and Linker options](/images/subsystemoptions.PNG)
 
 If we do this, we also need to change the Entrypoint of the application in `Advanced` in the Linker menu to the entrypoint of the C Runtime library: `mainCRTStartup`.
 
-![mainCRTStartup](/images/entrypoint-maincrtstartup.png)
+![mainCRTStartup](/images/entrypoint-maincrtstartup.PNG)
 
 
 A second, very straightforward way is to use editbin.exe which is available with Visual Studio:
