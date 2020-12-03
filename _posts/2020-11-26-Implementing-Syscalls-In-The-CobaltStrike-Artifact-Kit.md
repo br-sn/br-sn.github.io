@@ -32,7 +32,7 @@ I created a new solution in Visual Studio using the C++ console app template and
 
 ![Files in Solution](/images/files-in-solution.PNG)
 
-You'll notice straight away that patch.h and patch.c contain some errors relating to the undefined 'DATA_SIZE' identifier. In the artifact kit build script this preprocessor definition is passed as a flag to the mingw-gcc compiler at compile time. In VS, we can either define it manually or add it as a preprocessor definition in the project properties.
+You'll notice straight away that patch.h and patch.c contain some errors relating to the undefined 'DATA_SIZE' identifier. In the artifact kit build script this preprocessor definition is passed as a flag to the mingw-gcc compiler at compile time. In VS, I just defined it manually as `271360` - the same size as the build.sh script uses. If you plan on building a staged beacon, you will have to adjust this size.
 
 A second, different error remains. In `patch.c` on lines 25 and 26, we are confronted with `Error E0852 - expression must be a pointer to a complete object type`. Some quick googling [reveals](https://stackoverflow.com/questions/20154575/error-void-unknown-size) that adding to a `void *` is a GCC extension, but throws an error in Visual Studio. To fix this, we'll have to cast to the appropriate type first. In our case, we can cast to a `char *` to resolve the error.
 
