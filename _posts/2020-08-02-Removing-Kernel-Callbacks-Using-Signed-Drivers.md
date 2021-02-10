@@ -8,7 +8,7 @@ In fact, the main driver behind this was the answer given by people in informati
 
 > "Everything."
 
-As with so many Windows-things, a lot of the information that is available around these kernel callback structures is available because of the work of [Benjamin Delpy](https://twitter.com/gentilkiwi), specifically the source code for the Mimikatz driver (Mimidrv), which I've had to pour over multiple times to gain an understanding of how this all works.
+As with so many Windows-things, a lot of the information that is available around these kernel callback structures is available because of the work of [Benjamin Delpy](https://twitter.com/gentilkiwi), specifically the source code for the Mimikatz driver (Mimidrv), which I've had to pore over multiple times to gain an understanding of how this all works.
 
 The driver exploit used for this code was discovered and disclosed by [Barakat](https://github.com/Barakat/CVE-2019-16098) and was assigned CVE-2019-16098. It is a signed MSI driver that allows full kernel memory read and write, which turns out to be extremely useful for attackers and allows for a full system compromise. The PoC shows the ability to run a SYSTEM cmd prompt when logged in as a low privileged user.
 
